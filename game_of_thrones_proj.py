@@ -598,77 +598,86 @@ if __name__ == "__main__":
     load_characters_sql()
 
     count = 0
-    test_count = 0
+    test_list = []
+
+    # test_count = 0
 
     get_average_season_rating()
     get_second_to_last_difference_plot()
 
+    count += 1
+    test_list.append(1)
+
     while count >= 0:
 
-        count += 1
-        test_count += 1
+        while test_list[-1] == 1: # set phase 1
 
-        ask_season = input("Enter Season # (1-8) of Game of Thrones to view episodes (e.g. 1), or 'exit' \n")
-        # str(ask_season.lower()
-        if ask_season == "exit":
-            exit()
+        # test_count += 1
 
-        if ask_season.isnumeric():
-            for k, v in select_season().items():
-                if ask_season.lower() == str(k):
-                    print(f"\n------------------------------\nList of Episodes in Season {ask_season.capitalize()}\n------------------------------\n")
-                    # x = get_episodes_for_season(v)
-                    x = get_episode_urls_for_season(v)
-                    y = create_instances_from_url(x)
-                    xlist = []
-                    ylist = []
-                    for items in y:
-                    #     print(items.episode_name)
+            ask_season = input("Enter Season # (1-8) of Game of Thrones to view episodes (e.g. 1), or 'exit' \n")
+            # str(ask_season.lower()
+            if ask_season == "exit":
+                exit()
 
-                        xvals = [items.episode_name][0]
-                        yvals = [items.rating][0]
-                        xlist.append(xvals)
-                        ylist.append(yvals)
+            if ask_season.isnumeric():
+                for k, v in select_season().items():
+                    if ask_season.lower() == str(k):
+                        print(f"\n------------------------------\nList of Episodes in Season {ask_season.capitalize()}\n------------------------------\n")
+                        # x = get_episodes_for_season(v)
+                        x = get_episode_urls_for_season(v)
+                        y = create_instances_from_url(x)
+                        xlist = []
+                        ylist = []
+                        for items in y:
+                        #     print(items.episode_name)
 
-                    scatter_data = go.Scatter(x=xlist, y=ylist, mode='markers', marker={'symbol':'star', 'size': 30, 'color':'#FFD700'})
-                    basic_layout = go.Layout(title=f"Episode Ratings in Season {ask_season} of Game of Thrones", xaxis_title="Episode Name", yaxis_title="Rating")
-                    fig = go.Figure(data=scatter_data, layout=basic_layout)
-                    fig.show()
+                            xvals = [items.episode_name][0]
+                            yvals = [items.rating][0]
+                            xlist.append(xvals)
+                            ylist.append(yvals)
 
-                    char_season_count = []
-                    for eps in x:
-                        char_names = view_characters_in_episode(eps)
-                        for i in char_names:
-                            char_season_count.append(i)
-                    d = {x:char_season_count.count(x) for x in char_season_count}
-                    character_name, frequency_of_appearance = d.keys(), d.values()
+                        scatter_data = go.Scatter(x=xlist, y=ylist, mode='markers', marker={'symbol':'star', 'size': 30, 'color':'#FFD700'})
+                        basic_layout = go.Layout(title=f"Episode Ratings in Season {ask_season} of Game of Thrones", xaxis_title="Episode Name", yaxis_title="Rating")
+                        fig = go.Figure(data=scatter_data, layout=basic_layout)
+                        fig.show()
 
-                    xvals = tuple(character_name)
-                    yvals = tuple(frequency_of_appearance)
+                        char_season_count = []
+                        for eps in x:
+                            char_names = view_characters_in_episode(eps)
+                            for i in char_names:
+                                char_season_count.append(i)
+                        d = {x:char_season_count.count(x) for x in char_season_count}
+                        character_name, frequency_of_appearance = d.keys(), d.values()
 
-                    bar_data = go.Bar(x=xvals, y=yvals, marker_color='crimson')
-                    basic_layout = go.Layout(title=f"Frequency of Character Appearances in Season {ask_season}", xaxis_title="Character Name", yaxis_title="Number of Episodes")
-                    fig = go.Figure(data=bar_data, layout=basic_layout)
-                    fig.show()
+                        xvals = tuple(character_name)
+                        yvals = tuple(frequency_of_appearance)
 
-                    format_episode_list(y)
-                    break
+                        bar_data = go.Bar(x=xvals, y=yvals, marker_color='crimson')
+                        basic_layout = go.Layout(title=f"Frequency of Character Appearances in Season {ask_season}", xaxis_title="Character Name", yaxis_title="Number of Episodes")
+                        fig = go.Figure(data=bar_data, layout=basic_layout)
+                        fig.show()
 
+                        format_episode_list(y)
+                        test_list.append(2)
+                        break
+
+                else:
+                    print('[Error] Enter a proper Season selection')
             else:
                 print('[Error] Enter a proper Season selection')
-        else:
-            print('[Error] Enter a proper Season selection')
 
     # add interactivity to view character per episode
-        while ask_season == str(k):
+        # while ask_season == str(k):
+        while test_list[-1] == 2:
 
-            test_count += 1
+            # test_count += 1
 
             choose_ep = input("Choose a number to view a list of characters in the episode, or 'exit', or 'back' \n")
 
             if choose_ep == "exit":
                 exit()
             if choose_ep == 'back':
+                test_list.append(1)
                 break
             if choose_ep.isalpha():
                 print ('[Error] Invalid Input')
@@ -682,23 +691,26 @@ if __name__ == "__main__":
                     dany = view_characters_in_episode(x[int(choose_ep)-1])
                     format_character_names(dany)
                     print('\n')
+                    test_list.append(3)
 
                     # format_episode_list(y)
                     break
                 else:
                     print('[Error] Invalid Input')
 
-        while test_count >= 2:
+        # while test_count >= 2:
+        while test_list[-1] == 3:
 
             choose_character = input("Select a character to learn more information (eg. 6), or 'exit', or 'back' \n")
             # while choose_character.isnumeric():
 
-                # choose_character = input("Select a character to learn more information (eg. 6), or 'exit', or 'back' \n")
-
             if choose_character == "exit":
                 exit()
             if choose_character == 'back':
-                test_count -= 1
+                # test_count -= 1
+                test_list.append(2)
+                print(f"\n------------------------------\nList of Episodes in Season {ask_season.capitalize()}\n------------------------------\n")
+                format_episode_list(y)
                 break
             if choose_character.isalpha():
                 print ('[Error] Invalid Input')
