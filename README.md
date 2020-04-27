@@ -2,11 +2,11 @@
 
 ## Getting Started (Installs)
 
-from bs4 import BeautifulSoup
-import requests
-import json
-import plotly.graph_objs as go
-import sqlite3
+- from bs4 import BeautifulSoup
+- import requests
+- import json
+- import plotly.graph_objs as go
+- import sqlite3
 
 ### Running the Code: 
 
